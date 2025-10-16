@@ -53,9 +53,12 @@ const suggest = () => {
                     const boundingRect = input.getBoundingClientRect();
                     hideTillNextFocus = false;
                     currentInput = input;
-                    suggestBox.style.top = (boundingRect.top + boundingRect.height + 5) + "px";
-                    suggestBox.style.left = boundingRect.left + "px";
+                    const top = window.scrollY + boundingRect.top + boundingRect.height + 5;
+                    const left = window.scrollX + boundingRect.left;
+                    suggestBox.style.top = top + "px";
+                    suggestBox.style.left = left + "px";
                     suggestBox.style.maxWidth = (boundingRect.width + 6) + "px";
+                    suggestBox.style.minWidth = (boundingRect.width + 6) + "px";
                     show();
                     selectedIndex = 0;
                     filterOptions(input.value, useStars, caseInsensitive);

@@ -22,7 +22,7 @@
    "options_ui": {
       "page": "src/devtoolstab.html"
    },
-   "permissions": [ "declarativeNetRequestWithHostAccess", "scripting", "storage", "tabs", "unlimitedStorage", "webNavigation" ],
+   "permissions": [ "declarativeNetRequestWithHostAccess", "declarativeNetRequestFeedback", "scripting", "storage", "tabs", "unlimitedStorage", "webNavigation" ],
    "update_url": "https://clients2.google.com/service/update2/crx",
    "version": "2.0"
 }

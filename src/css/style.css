@@ -318,6 +318,16 @@ div, span {
     background: #eee;
 }
 
+/* 关闭状态下仍允许操作分组头部与新增按钮 */
+.domainContainer.disabled .domainHeaderTop .collapse .btn-ghost,
+.domainContainer.disabled .domainHeaderBottom .addRule .btn,
+.domainContainer.disabled .domainHeaderBottom .move .btn,
+.domainContainer.disabled .domainHeaderBottom .delete .btn,
+.domainContainer.disabled .domainHeaderBottom .switch {
+    pointer-events: auto;
+    opacity: 1;
+}
+
 .header-inputs {
     margin-left: 10px;
     float: left;
@@ -573,6 +583,7 @@ div, span {
     max-height: 100px;
     overflow: auto;
     z-index: 200;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
 }
 
 .suggestTable {
