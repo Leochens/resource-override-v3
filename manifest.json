@@ -1,0 +1,28 @@
+{
+   "action": {
+      "default_icon": {
+         "16": "icons/icon-16x16.png"
+      }
+   },
+   "background": {
+      "service_worker": "src/background.js",
+      "type": "module"
+   },
+   "description": "An extension to help you gain full control of any website by redirecting traffic, replacing, editing, or inserting new content.",
+   "devtools_page": "src/devtools.html",
+   "host_permissions": [ "*://*/*" ],
+   "icons": {
+      "128": "icons/icon-128x128.png",
+      "16": "icons/icon-16x16.png",
+      "48": "icons/icon-48x48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoktAtCafDM5ZC0R5GbWurtTx1r5kTG+nI6BnWpPJLXeT67kUotejLtBQpHEHOgX5CBMl4REKyYOVMKcf8qQsODUmN+ca6OQe5jdrGHdo2l5SXlA9X7i6fBd16Eyp2tMj2bZ4jmHrpATmMqvD4cpC09i903Z32OUN+qPXocGb+kyViqfZ2CjfANfFSINIKN65nKCTxlzZ1ymXbz9izCwEKq+bpiwYg1NUmkgKy5UYmQMl4brYyMt30CFzNLrKIElda5lSDW5wcwb62uk56IwiS+BTCsOLvG9TxfEIGRFsuFdN7feonfXB74Fx2aAvtjPelnrck+lWxCktikT5lzhqMwIDAQAB",
+   "manifest_version": 3,
+   "name": "Resource Override",
+   "options_ui": {
+      "page": "src/devtoolstab.html"
+   },
+   "permissions": [ "declarativeNetRequestWithHostAccess", "scripting", "storage", "tabs", "unlimitedStorage", "webNavigation" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.0"
+}
