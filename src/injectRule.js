@@ -90,17 +90,21 @@ const createFileInjectMarkup = async (savedData, saveFunc) => {
     });
 
     if (chrome.devtools && chrome.devtools.inspectedWindow) {
-        matchInput.addEventListener("focus", () => {
+        const updateHighlight = () => {
             const regex = buildRegexFromMatch(matchInput.value || "");
-            if (!regex) { return; }
+            if (!regex) { override.classList.remove("proxy-hit"); return; }
             getTabResources((resources) => {
                 const matched = resources.filter(u => regex.test(u));
-                if (!matched.length) return;
-                // Note: Inject 规则也可参考匹配到的资源 URL
-                // 这里仅作为便捷选择
-                // 不改变 fileName/fileType
+                if (ruleOnOff.checked && matched.length) {
+                    override.classList.add("proxy-hit");
+                } else {
+                    override.classList.remove("proxy-hit");
+                }
             });
-        });
+        };
+        matchInput.addEventListener("focus", updateHighlight);
+        matchInput.addEventListener("keyup", updateHighlight);
+        ruleOnOff.addEventListener("change", updateHighlight);
     }
     const changeOnOffSwitch = () => {
         if (ruleOnOff.checked) {

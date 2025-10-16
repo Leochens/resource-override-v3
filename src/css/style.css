@@ -55,6 +55,11 @@ div, span {
     margin-right: 10px;
 }
 
+#helpAndOptions .refreshBtnContainer {
+    float: left;
+    margin-right: 10px;
+}
+
 #optionsPopOver {
     display: none;
     width: 180px;
@@ -448,6 +453,10 @@ div, span {
     margin: 4px 0;
     opacity: 1;
     transition: opacity 0.5s;
+}
+
+.ruleContainer.proxy-hit {
+    background: rgba(255, 165, 0, 0.18); /* 橙色高亮 */
 }
 
 .ruleContainer input {

@@ -90,15 +90,22 @@ const createHeaderRuleMarkup = async (savedData, saveFunc) => {
         if (e.key === "Escape") { noteInput.value = savedData.note || ""; noteInput.blur(); }
     });
     if (chrome.devtools && chrome.devtools.inspectedWindow) {
-        matchInput.addEventListener("focus", () => {
+        const updateHighlight = () => {
             const regex = buildRegexFromMatch(matchInput.value || "");
-            if (!regex) { return; }
+            if (!regex) { override.classList.remove("proxy-hit"); return; }
             getTabResources((resources) => {
                 const matched = resources.filter(u => regex.test(u));
-                if (!matched.length) return;
                 mainSuggest.fillOptions(matched.slice(0, 50));
+                if (ruleOnOff.checked && matched.length) {
+                    override.classList.add("proxy-hit");
+                } else {
+                    override.classList.remove("proxy-hit");
+                }
             });
-        });
+        };
+        matchInput.addEventListener("focus", updateHighlight);
+        matchInput.addEventListener("keyup", updateHighlight);
+        ruleOnOff.addEventListener("change", updateHighlight);
     }
     noteInput.addEventListener("keyup", saveFunc);
 

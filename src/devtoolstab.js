@@ -4,7 +4,8 @@ import {
     fadeOut,
     fadeIn,
     getNextGroupId,
-    saveDataAndSync
+    saveDataAndSync,
+    buildRegexFromMatch
 } from "./util.js";
 import { mainSuggest, requestHeadersSuggest, responseHeadersSuggest } from "./suggest.js";
 import setupNetRequestRules from "./netRequestRules.js";
@@ -51,12 +52,30 @@ async function renderData() {
         ui.domainDefs.appendChild(newGroup);
         saveRuleGroup(newGroupData);
     }
+    const highlightAllRules = (resources = []) => {
+        const ruleEls = Array.prototype.slice.call(document.querySelectorAll('.ruleContainer'));
+        ruleEls.forEach(el => {
+            const onOff = el.querySelector('.onoffswitch-checkbox');
+            const matchInput = el.querySelector('.matchInput');
+            if (!onOff || !matchInput) return;
+            const regex = buildRegexFromMatch(matchInput.value || "");
+            const matched = regex ? resources.some(u => regex.test(u)) : false;
+            if (onOff.checked && matched) {
+                el.classList.add('proxy-hit');
+            } else {
+                el.classList.remove('proxy-hit');
+            }
+        });
+    };
+
     const isSuggestSupported = getTabResources((res) => {
         mainSuggest.fillOptions(res);
+        highlightAllRules(res);
     });
     if (!isSuggestSupported) {
         mainSuggest.setShouldSuggest(false);
     }
+    // 可选：不自动随页面刷新，而提供刷新按钮
 }
 
 const renderErrors = () => {
@@ -102,6 +121,17 @@ async function init() {
             setGlobalUi(next);
             // 触发规则刷新
             chrome.runtime.sendMessage({ action: "sync" });
+        });
+    }
+
+    const refreshBtn = document.getElementById("refreshPageBtn");
+    if (refreshBtn) {
+        refreshBtn.addEventListener("click", () => {
+            try {
+                window.location.reload();
+            } catch (e) {
+                console.warn("Failed to reload overrides page", e);
+            }
         });
     }
 

@@ -81,7 +81,7 @@ const createWebOverrideMarkup = async (savedData, saveFunc) => {
 
     // 在 DevTools 中：点击 From 输入框时，若匹配当前请求，展示候选并可一键填充
     if (chrome.devtools && chrome.devtools.inspectedWindow) {
-        matchInput.addEventListener("focus", () => {
+        const updateHighlight = () => {
             const regex = buildRegexFromMatch(matchInput.value || "");
             if (!regex) { return; }
             getTabResources((resources) => {
@@ -89,8 +89,17 @@ const createWebOverrideMarkup = async (savedData, saveFunc) => {
                 if (!matched.length) return;
                 // 简易下拉：复用 suggest 机制（填充选项列表）
                 mainSuggest.fillOptions(matched.slice(0, 50));
+                // 若规则开启并且存在备选，标橙
+                if (ruleOnOff.checked && matched.length) {
+                    override.classList.add("proxy-hit");
+                } else {
+                    override.classList.remove("proxy-hit");
+                }
             });
-        });
+        };
+        matchInput.addEventListener("focus", updateHighlight);
+        matchInput.addEventListener("keyup", updateHighlight);
+        ruleOnOff.addEventListener("change", updateHighlight);
     }
 
     matchInput.addEventListener("keyup", saveFunc);

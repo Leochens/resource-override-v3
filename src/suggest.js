@@ -16,6 +16,8 @@ const suggest = () => {
         suggestTable.innerHTML = "";
         numOptions = 0;
         options = [];
+        // store raw options for programmatic checks
+        fillOptions.rawValues = opts.slice();
         opts.forEach((option) => {
             const newRow = createEl("tr");
             const newRowContent = createEl("td.suggestOption");
@@ -28,6 +30,9 @@ const suggest = () => {
             options.push(newRow);
             ++numOptions;
         });
+        try {
+            window.dispatchEvent(new CustomEvent("ro-suggest-updated", { detail: { count: opts.length } }));
+        } catch {}
     }
 
     function init(input, useStars, caseInsensitive) {
@@ -211,6 +216,34 @@ const suggest = () => {
         }
     }
 
+    function hasAnyMatch(inputVal, useStars, caseInsensitive) {
+        const raw = fillOptions.rawValues || [];
+        if (!raw.length) return false;
+        useStars = useStars === undefined ? true : useStars;
+        if (caseInsensitive) {
+            inputVal = (inputVal || "").toLowerCase();
+        }
+        let searchParts = (inputVal || "").split("*");
+        if (!useStars) {
+            searchParts = [inputVal || ""];
+        }
+        const matches = raw.some((opt) => {
+            let optionStr = opt;
+            if (caseInsensitive) optionStr = optionStr.toLowerCase();
+            let searchedTo = -1;
+            for (let i = 0; i < searchParts.length; i++) {
+                const s = searchParts[i];
+                if (s !== "") {
+                    const idx = optionStr.indexOf(s, searchedTo);
+                    if (idx === -1) return false;
+                    searchedTo = idx + s.length;
+                }
+            }
+            return true;
+        });
+        return matches;
+    }
+
     function selectDown(dontTryAgain) {
         const oldSelectedIndex = selectedIndex;
         let isVisible;
@@ -276,7 +309,8 @@ const suggest = () => {
     return {
         init: init,
         fillOptions: fillOptions,
-        setShouldSuggest: setShouldSuggest
+        setShouldSuggest: setShouldSuggest,
+        hasAnyMatch: hasAnyMatch
     };
 };
 

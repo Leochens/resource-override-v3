@@ -97,6 +97,23 @@ const createFileOverrideMarkup = async (savedData, saveFunc) => {
     }
 
     matchInput.addEventListener("keyup", saveFunc);
+    if (chrome.devtools && chrome.devtools.inspectedWindow) {
+        const updateHighlight = () => {
+            const regex = buildRegexFromMatch(matchInput.value || "");
+            if (!regex) { override.classList.remove("proxy-hit"); return; }
+            getTabResources((resources) => {
+                const matched = resources.filter(u => regex.test(u));
+                if (ruleOnOff.checked && matched.length) {
+                    override.classList.add("proxy-hit");
+                } else {
+                    override.classList.remove("proxy-hit");
+                }
+            });
+        };
+        matchInput.addEventListener("focus", updateHighlight);
+        matchInput.addEventListener("keyup", updateHighlight);
+        ruleOnOff.addEventListener("change", updateHighlight);
+    }
     noteInput.addEventListener("keyup", saveFunc);
     const changeOnOffSwitch = () => {
         if (ruleOnOff.checked) {
