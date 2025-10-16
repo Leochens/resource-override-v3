@@ -67,6 +67,10 @@ const urlMatches = (matchStr, url) => {
 // TODO: This code will probably get me denied
 chrome.webNavigation.onCommitted.addListener((details) => {
     allRuleGroups.forEach((ruleGroup) => {
+        // 全局禁用时，不注入
+        // 注：这里用 storage 读取一次即可，注入点频率不高
+        chrome.storage.local.get({ globalDisabled: false }).then(({ globalDisabled }) => {
+            if (globalDisabled) return;
         if (ruleGroup.on) {
             const groupMatch = ruleGroup.matchUrl || ruleGroup.name || "";
             const groupOk = groupMatch ? urlMatches(groupMatch, details.url) : true;
@@ -99,5 +103,6 @@ chrome.webNavigation.onCommitted.addListener((details) => {
                 }
             });
         }
+        });
     });
 });

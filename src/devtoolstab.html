@@ -221,10 +221,11 @@
 </template>
 
 <div id="title">
-    <h1>Resource Override</h1>
+    <h1>Resource Override - Ryan's Version</h1>
 </div>
 
 <div id="helpAndOptions">
+    <div class="quickBtnContainer"><button id="globalToggleBtn" class="btn">禁用代理</button></div>
     <div class="optionsBtnContainer"><button id="optionsBtn" class="btn">Options</button></div>
     <div class="helpBtnContainer"><button id="helpBtn" class="btn">Help</button></div>
 
@@ -374,6 +375,8 @@ The devtools tab has more features that aren't avilable on the options page. <a 
 <div id="generalToast" class="toast fadeOut"></div>
 
 <div id="debug"></div>
+
+<div id="pageDimmer" class="pageDimmer" style="display:none;"></div>
 
 <!-- Library stuff -->
 <script src="../lib/beautify.min.js"></script>

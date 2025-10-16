@@ -84,6 +84,27 @@ async function init() {
     initOptions();
     updateOptions();
 
+    // Global toggle: disable/restore proxy (rules)
+    const globalState = await chrome.storage.local.get({ globalDisabled: false });
+    const toggleBtn = document.getElementById("globalToggleBtn");
+    const pageDimmer = document.getElementById("pageDimmer");
+    const setGlobalUi = (disabled) => {
+        if (toggleBtn) toggleBtn.textContent = disabled ? "恢复代理" : "禁用代理";
+        if (pageDimmer) pageDimmer.style.display = disabled ? "block" : "none";
+        document.body.style.filter = disabled ? "grayscale(60%)" : "none";
+    };
+    setGlobalUi(globalState.globalDisabled);
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", async () => {
+            const last = (await chrome.storage.local.get({ globalDisabled: false })).globalDisabled;
+            const next = !last;
+            await chrome.storage.local.set({ globalDisabled: next });
+            setGlobalUi(next);
+            // 触发规则刷新
+            chrome.runtime.sendMessage({ action: "sync" });
+        });
+    }
+
     ui.addDomainBtn.addEventListener("click", async () => {
         const ruleGroups = (await chrome.storage.local.get({ ruleGroups: [] })).ruleGroups;
         const id = getNextGroupId(ruleGroups);

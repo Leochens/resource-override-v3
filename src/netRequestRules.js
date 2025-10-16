@@ -41,7 +41,7 @@ const getInitiatorDomainsFromGroup = (group = {}) => {
     return [host.replace(/^\*\./, '')];
 };
 
-const setupNetRequestRules = (group = {}, deletedRuleIds = [], ruleErrors = {}) => {
+const setupNetRequestRules = async (group = {}, deletedRuleIds = [], ruleErrors = {}) => {
     const allRuleIds = [];
     const ruleIdToRule = {};
     const rules = group.rules || [];
@@ -51,6 +51,16 @@ const setupNetRequestRules = (group = {}, deletedRuleIds = [], ruleErrors = {}) 
     });
     const removeRuleIds = allRuleIds.concat(deletedRuleIds);
     const newRules = [];
+    const { globalDisabled } = await chrome.storage.local.get({ globalDisabled: false });
+    if (globalDisabled) {
+        return chrome.declarativeNetRequest.updateDynamicRules({
+            removeRuleIds,
+            addRules: []
+        }).then(() => ruleErrors).catch(e => {
+            console.error("FAILED TO UPDATE RULES!", e);
+            return ruleErrors;
+        });
+    }
     if (group.on) {
         const initiatorDomains = getInitiatorDomainsFromGroup(group);
         rules.forEach((rule, idx) => {

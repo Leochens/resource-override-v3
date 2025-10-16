@@ -50,6 +50,11 @@ div, span {
     position: relative;
 }
 
+#helpAndOptions .quickBtnContainer {
+    float: left;
+    margin-right: 10px;
+}
+
 #optionsPopOver {
     display: none;
     width: 180px;
@@ -305,6 +310,12 @@ div, span {
     box-shadow: 0 2px 12px 0 rgba(0,0,0,0.12), 0 1.5px 4px 0 rgba(0,0,0,0.12);
     padding: 10px;
     border-radius: 5px;
+}
+
+.domainContainer.disabled {
+    opacity: 0.65; /* 比默认更明显 */
+    filter: grayscale(40%) brightness(0.95);
+    background: #eee;
 }
 
 .header-inputs {
@@ -633,6 +644,17 @@ div, span {
 
 .fadeOut {
     opacity: 0;
+    pointer-events: none;
+}
+
+.pageDimmer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 90;
     pointer-events: none;
 }
 
