@@ -32,9 +32,9 @@ const initOptions = () => {
         });
     });
 
-    ui.saveRulesLink.addEventListener("click", (e) => {
+    ui.saveRulesLink.addEventListener("click", async (e) => {
         e.preventDefault();
-        const data = exportData();
+        const data = await exportData();
         const json = JSON.stringify(data);
         const blob = new Blob([json], {type: "text/plain"});
         const downloadLink = document.createElement("a");

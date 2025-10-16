@@ -200,8 +200,8 @@ export const importData = async (data, version) => {
 
 export const exportData = async () => {
     const existingData = await chrome.storage.local.get({ ruleGroups: [] });
-    const toExport = { v: 2, ruleGroups: [] };
-    toExport.ruleGroups = await Promise.all(existingData.ruleGroups.map(async ruleGroup => {
+    const toExport = { v: 2, data: [] };
+    toExport.data = await Promise.all(existingData.ruleGroups.map(async ruleGroup => {
         const fileIds = {};
         let hasFileRule = false;
         ruleGroup.rules.forEach(rule => {
@@ -214,12 +214,18 @@ export const exportData = async () => {
         if (hasFileRule) {
             files = await chrome.storage.local.get(fileIds);
         }
-        ruleGroup.rules.forEach(rule => {
+        const clonedRules = (ruleGroup.rules || []).map(rule => ({ ...rule }));
+        clonedRules.forEach(rule => {
             if (rule.type === "fileOverride" || rule.type === "fileInject") {
                 rule.file = files[`f${rule.id}`];
             }
         });
-        return ruleGroup;
+        return {
+            id: ruleGroup.id,
+            name: ruleGroup.name,
+            on: ruleGroup.on,
+            rules: clonedRules
+        };
     }));
 
     return toExport;
