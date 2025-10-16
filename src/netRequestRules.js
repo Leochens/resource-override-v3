@@ -20,6 +20,27 @@ export const transformMatchReplace = (match = "", replace = "") => {
     return result;
 };
 
+const getInitiatorDomainsFromGroup = (group = {}) => {
+    const raw = (group.matchUrl || group.name || "").trim();
+    if (!raw) return null;
+    let p = raw;
+    // strip schemes like *://, http://, https://, and leading //
+    if (p.startsWith('*://')) p = p.slice(4);
+    if (p.startsWith('http://') || p.startsWith('https://')) {
+        try {
+            const u = new URL(p);
+            p = u.host;
+        } catch {
+            // fall through
+        }
+    }
+    if (p.startsWith('//')) p = p.slice(2);
+    const host = p.split('/')[0];
+    if (!host || host.includes('*')) return null;
+    if (!/^[A-Za-z0-9.-]+$/.test(host)) return null;
+    return [host.replace(/^\*\./, '')];
+};
+
 const setupNetRequestRules = (group = {}, deletedRuleIds = [], ruleErrors = {}) => {
     const allRuleIds = [];
     const ruleIdToRule = {};
@@ -31,6 +52,7 @@ const setupNetRequestRules = (group = {}, deletedRuleIds = [], ruleErrors = {}) 
     const removeRuleIds = allRuleIds.concat(deletedRuleIds);
     const newRules = [];
     if (group.on) {
+        const initiatorDomains = getInitiatorDomainsFromGroup(group);
         rules.forEach((rule, idx) => {
             const priority = 10 + rules.length - idx;
             if (rule.on && !ruleErrors[rule.id]) {
@@ -47,7 +69,8 @@ const setupNetRequestRules = (group = {}, deletedRuleIds = [], ruleErrors = {}) 
                         },
                         condition: {
                             resourceTypes: allResourceTypes,
-                            regexFilter: transformedMatchReplace.match
+                            regexFilter: transformedMatchReplace.match,
+                            ...(initiatorDomains ? { initiatorDomains } : {})
                         }
                     });
                 } else if (rule.type === "fileOverride" && rule.match) {
@@ -65,7 +88,8 @@ const setupNetRequestRules = (group = {}, deletedRuleIds = [], ruleErrors = {}) 
                         },
                         condition: {
                             resourceTypes: allResourceTypes,
-                            regexFilter: transformedMatchReplace.match
+                            regexFilter: transformedMatchReplace.match,
+                            ...(initiatorDomains ? { initiatorDomains } : {})
                         }
                     });
                 } else if (rule.type === "headerRule" && rule.match) {
@@ -86,7 +110,8 @@ const setupNetRequestRules = (group = {}, deletedRuleIds = [], ruleErrors = {}) 
                             action,
                             condition: {
                                 resourceTypes: allResourceTypes,
-                                regexFilter: transformedMatchReplace.match
+                                regexFilter: transformedMatchReplace.match,
+                                ...(initiatorDomains ? { initiatorDomains } : {})
                             }
                         });
                     }

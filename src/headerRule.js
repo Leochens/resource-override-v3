@@ -1,4 +1,5 @@
 import { mainSuggest } from "./suggest.js";
+import { buildRegexFromMatch, getTabResources } from "./util.js";
 import { openHeaderEditor, getHeaderEditRules } from "./headerEditor.js";
 import {
     instanceTemplate,
@@ -26,6 +27,8 @@ const createHeaderRuleMarkup = async (savedData, saveFunc) => {
     const override = instanceTemplate(headerRuleTemplate);
     override.id = `r${rid}`;
     const matchInput = override.querySelector(".matchInput");
+    const noteInput = override.querySelector(".noteInput");
+    const noteLabel = override.querySelector(".noteLabel");
     const requestRulesInput = override.querySelector(".requestRules");
     const responseRulesInput = override.querySelector(".responseRules");
     const editBtn = override.querySelector(".edit-btn");
@@ -33,6 +36,8 @@ const createHeaderRuleMarkup = async (savedData, saveFunc) => {
     const deleteBtn = override.querySelector(".sym-btn");
 
     matchInput.value = savedData.match || "";
+    noteInput.value = savedData.note || "";
+    noteLabel.textContent = savedData.note || "规则";
     makeFieldRequired(matchInput);
 
     const updateHeaderInput = (input, ruleStr) => {
@@ -66,6 +71,36 @@ const createHeaderRuleMarkup = async (savedData, saveFunc) => {
     mainSuggest.init(matchInput);
 
     matchInput.addEventListener("keyup", saveFunc);
+    const showNoteEdit = () => {
+        noteLabel.style.display = "none";
+        noteInput.style.display = "inline-block";
+        noteInput.focus();
+        noteInput.select();
+    };
+    const hideNoteEdit = () => {
+        const val = noteInput.value || "规则";
+        noteLabel.textContent = val;
+        noteLabel.style.display = "inline-block";
+        noteInput.style.display = "none";
+    };
+    noteLabel.addEventListener("dblclick", showNoteEdit);
+    noteInput.addEventListener("blur", () => { hideNoteEdit(); saveFunc(); });
+    noteInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") { noteInput.blur(); }
+        if (e.key === "Escape") { noteInput.value = savedData.note || ""; noteInput.blur(); }
+    });
+    if (chrome.devtools && chrome.devtools.inspectedWindow) {
+        matchInput.addEventListener("focus", () => {
+            const regex = buildRegexFromMatch(matchInput.value || "");
+            if (!regex) { return; }
+            getTabResources((resources) => {
+                const matched = resources.filter(u => regex.test(u));
+                if (!matched.length) return;
+                mainSuggest.fillOptions(matched.slice(0, 50));
+            });
+        });
+    }
+    noteInput.addEventListener("keyup", saveFunc);
 
     override.addEventListener("click", (e) => {
         if (e.target.classList.contains("headerRuleInput")) {

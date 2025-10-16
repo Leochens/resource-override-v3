@@ -36,10 +36,10 @@ async function renderData() {
     const ruleGroups = (await chrome.storage.local.get({ ruleGroups: [] })).ruleGroups;
 
     if (ruleGroups.length) {
-        ruleGroups.forEach(async (group) => {
+        for (const group of ruleGroups) {
             const markup = await createDomainMarkup(group);
             ui.domainDefs.appendChild(markup);
-        });
+        }
     } else {
         const newGroupData = {
             id: 1,

@@ -68,6 +68,11 @@ const urlMatches = (matchStr, url) => {
 chrome.webNavigation.onCommitted.addListener((details) => {
     allRuleGroups.forEach((ruleGroup) => {
         if (ruleGroup.on) {
+            const groupMatch = ruleGroup.matchUrl || ruleGroup.name || "";
+            const groupOk = groupMatch ? urlMatches(groupMatch, details.url) : true;
+            if (!groupOk) {
+                return;
+            }
             const rules = ruleGroup.rules || [];
             rules.forEach((rule) => {
                 if (rule.on && rule.type === "fileInject" && urlMatches(rule.match, details.url)) {

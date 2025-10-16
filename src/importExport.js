@@ -9,6 +9,7 @@ export const getDomainData = (domain) => {
             rules.push({
                 id: parseRuleId(el.id),
                 type: "normalOverride",
+                note: el.querySelector(".noteInput")?.value || "",
                 match: el.querySelector(".matchInput").value,
                 replace: el.querySelector(".replaceInput").value,
                 on: el.querySelector(".onoffswitch-checkbox").checked
@@ -17,6 +18,7 @@ export const getDomainData = (domain) => {
             rules.push({
                 id: parseRuleId(el.id),
                 type: "fileOverride",
+                note: el.querySelector(".noteInput")?.value || "",
                 match: el.querySelector(".matchInput").value,
                 on: el.querySelector(".onoffswitch-checkbox").checked
             });
@@ -24,6 +26,7 @@ export const getDomainData = (domain) => {
             rules.push({
                 id: parseRuleId(el.id),
                 type: "fileInject",
+                note: el.querySelector(".noteInput")?.value || "",
                 match: el.querySelector(".matchInput").value,
                 fileName: el.querySelector(".fileName").value,
                 fileType: el.querySelector(".fileTypeSelect").value,
@@ -33,6 +36,7 @@ export const getDomainData = (domain) => {
             rules.push({
                 id: parseRuleId(el.id),
                 type: "headerRule",
+                note: el.querySelector(".noteInput")?.value || "",
                 match: el.querySelector(".matchInput").value,
                 requestRules: el.querySelector(".requestRules").dataset.rules || "",
                 responseRules: el.querySelector(".responseRules").dataset.rules || "",
@@ -44,6 +48,7 @@ export const getDomainData = (domain) => {
     return {
         id: parseInt(domain.id.substring(1), 10),
         matchUrl: domain.querySelector(".domainMatchInput").value,
+        name: domain.querySelector(".domainNameInput")?.value || "",
         rules: rules,
         on: domain.querySelector(".onoffswitch-checkbox").checked
     };

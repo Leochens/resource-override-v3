@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Resource Override</title>
+<title>Resource Override - Ryan's Version</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <link rel="stylesheet" type="text/css" href="css/on-off-switch.css">
 </head>
@@ -24,18 +24,32 @@
 <template id="domainTemplate">
     <div class="domainContainer">
         <div class="domainHeader">
-            <div class="domainText">
-                Group Name:
+            <div class="domainHeaderTop">
+                <div class="collapse">
+                    <button class="btn-ghost collapseBtn" title="Collapse/Expand">▾</button>
+                </div>
+                <!-- <div class="domainNameText">Group Name:</div> -->
+                <div class="domainName">
+                    <span class="domainNameDisplay" title="双击编辑"></span>
+                    <input type="input" class="domainNameInput" placeholder="My Rules Group" style="display:none;">
+                </div>
             </div>
-            <div class="domain">
-                <input type="input" class="domainMatchInput" placeholder="My Common Rules">
-            </div>
-            <div class="addRule">
-                <button class="btn addRuleBtn">Add Rule</button>
-            </div>
-            <div class="switch"></div>
-            <div class="delete">
-                <button class="deleteBtn btn sym-btn">&#215</button>
+            <div class="domainHeaderBottom">
+                <div class="domainText">Group Match:</div>
+                <div class="domain">
+                    <input type="input" class="domainMatchInput" placeholder="My Common Rules">
+                </div>
+                <div class="addRule">
+                    <button class="btn addRuleBtn">Add Rule</button>
+                </div>
+                <div class="move">
+                    <button class="btn moveUpBtn" title="Move Up">▲</button>
+                    <button class="btn moveDownBtn" title="Move Down">▼</button>
+                </div>
+                <div class="switch"></div>
+                <div class="delete">
+                    <button class="deleteBtn btn sym-btn">&#215</button>
+                </div>
             </div>
         </div>
         <div class="overrideRules">
@@ -48,6 +62,10 @@
     <div class="ruleContainer normalOverride">
         <div class="handle">
             <div class="arrow-up"></div><div class="arrow-down"></div>
+        </div>
+        <div class="note">
+            <span class="noteLabel" title="双击编辑"></span>
+            <input type="input" class="noteInput" placeholder="规则" style="display:none;">
         </div>
         <div class="match">
             From:
@@ -73,6 +91,10 @@
         <div class="handle">
             <div class="arrow-up"></div><div class="arrow-down"></div>
         </div>
+        <div class="note">
+            <span class="noteLabel" title="双击编辑"></span>
+            <input type="input" class="noteInput" placeholder="规则" style="display:none;">
+        </div>
         <div class="match">
             From:
         </div>
@@ -96,6 +118,10 @@
     <div class="ruleContainer fileInject">
         <div class="handle">
             <div class="arrow-up"></div><div class="arrow-down"></div>
+        </div>
+        <div class="note">
+            <span class="noteLabel" title="双击编辑"></span>
+            <input type="input" class="noteInput" placeholder="规则" style="display:none;">
         </div>
         <div class="match" style="flex-basis: 56px;">
             Inject On:
@@ -141,6 +167,10 @@
     <div class="ruleContainer headerRule">
         <div class="handle">
             <div class="arrow-up"></div><div class="arrow-down"></div>
+        </div>
+        <div class="note">
+            <span class="noteLabel" title="双击编辑"></span>
+            <input type="input" class="noteInput" placeholder="规则" style="display:none;">
         </div>
         <div class="ruleType">
             For:

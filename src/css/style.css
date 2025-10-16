@@ -12,6 +12,7 @@ body {
 
 input {
     height: 25px;
+    border: 1px solid #999;
 }
 
 input[readonly] {
@@ -301,6 +302,9 @@ div, span {
 .domainContainer {
     margin-bottom: 40px;
     transition: opacity 0.5s;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.12), 0 1.5px 4px 0 rgba(0,0,0,0.12);
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .header-inputs {
@@ -309,43 +313,84 @@ div, span {
 }
 
 .domainHeader {
-    display: flex;
+    display: block;
     border-bottom: 1px solid #999999;
     padding-bottom: 4px;
+}
+
+.domainHeaderTop {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 6px;
+}
+
+.domainHeaderTop .domainNameText {
+    flex: 0 0 90px;
+    padding-top: 2px;
+    text-align: right;
+}
+
+.domainHeaderTop .domainName {
+    flex: 1 1 auto;
+    margin: 0 6px 0 6px;
+}
+
+.domainNameDisplay {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 4px 6px;
+    cursor: default;
+}
+
+.domainHeaderTop .collapse {
+    flex: 0 0 28px;
+    text-align: center;
+}
+
+.domainHeaderBottom {
+    display: flex;
+    align-items: center;
 }
 
 .domainHeader input {
     width: 100%;
 }
 
-.domainHeader .domainText {
+.domainHeaderBottom .domainText {
     flex: 0 0 80px;
-    padding-top: 8px;
+    /* padding-top: 8px; */
     text-align: center;
 }
 
-.domainHeader .domain {
+.domainHeaderBottom .domain {
     flex: 1 1 auto;
     margin: 4px;
 }
 
-.domainHeader .addRule {
+.domainHeaderBottom .addRule {
     flex: 0 0 88px;
     text-align: center;
 }
 
-.domainHeader .switch {
+.domainHeaderBottom .switch {
     flex: 0 0 90px;
     text-align: center;
 }
 
-.domainHeader .delete {
+.domainHeaderBottom .delete {
     flex: 0 0 36px;
     text-align: right;
 }
 
+.domainHeaderBottom .move {
+    flex: 0 0 84px;
+    text-align: center;
+}
+
 .overrideRules {
-    margin: 10px 0 0 40px;
+    margin: 10px 0 0 0px;
 }
 
 .handle {
@@ -397,6 +442,21 @@ div, span {
 .ruleContainer .rule {
     flex: 1 1 auto;
     margin: 6px;
+}
+
+.ruleContainer .note {
+    flex: 0 0 50px;
+    padding: 6px 0;
+}
+
+.ruleContainer .noteLabel {
+    display: inline-block;
+    font-weight: bold;
+    padding: 4px 0;
+    width: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .ruleContainer .arrow {
@@ -518,6 +578,15 @@ div, span {
     border: 2px solid #999999;
     border-radius: 5px;
     background-color: #EEEEEE;
+    cursor: pointer;
+    outline-width: 0;
+    height: 34px;
+}
+
+.btn-ghost {
+    border: 1px solid #999999;
+    border-radius: 5px;
+    background-color: transparent;
     cursor: pointer;
     outline-width: 0;
     height: 34px;

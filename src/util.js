@@ -1,5 +1,6 @@
 /* globals chrome */
 import createOnOffSwitch from "./onOffSwitch.js";
+import globMatchToDNRRegex from "./globMatchToDNRRegex.js";
 
 
 export const getUiElements = (parentElement) => {
@@ -140,6 +141,20 @@ export const getTabResources = (cb) => {
         return true;
     }
     return false;
+};
+
+export const buildRegexFromMatch = (match = "") => {
+    const trimMatch = match.trim();
+    if (trimMatch.length > 2 && trimMatch[0] === "/" && trimMatch[trimMatch.length - 1] === "/") {
+        try {
+            return new RegExp(trimMatch.substring(1, trimMatch.length - 1));
+        } catch {}
+    }
+    const result = globMatchToDNRRegex(match, "");
+    try {
+        return new RegExp(`^${result.match}$`);
+    } catch {}
+    return null;
 };
 
 export const fadeOut = (el, opts = {}) => {

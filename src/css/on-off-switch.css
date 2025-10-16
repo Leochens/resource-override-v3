@@ -18,7 +18,7 @@ input[type="checkbox"].onoffswitch-checkbox {
     left: 0;
 }
 .onoffswitch-checkbox:hover + .onoffswitch-label .onoffswitch-on {
-    background-color: #34A7C1;
+    background-color: #2da34a;
 }
 .onoffswitch-checkbox:hover + .onoffswitch-label .onoffswitch-off {
     background-color: #DDDDDD;
@@ -37,7 +37,7 @@ input[type="checkbox"].onoffswitch-checkbox {
     font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     padding-left: 10px;
-    background-color: #54B7D1;
+    background-color: #2ecc71; /* Green for ON */
     color: #FFFFFF;
     text-align: justify;
 }
@@ -46,7 +46,7 @@ input[type="checkbox"].onoffswitch-checkbox {
     font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     padding-right: 10px;
-    background-color: #EEEEEE; color: #999999;
+    background-color: #e74c3c; color: #ffffff; /* Red for OFF */
     text-align: right;
 }
 .onoffswitch-inner:before, .onoffswitch-inner:after {
