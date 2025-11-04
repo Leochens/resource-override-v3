@@ -1,5 +1,5 @@
 /* globals chrome */
-import { transformMatchReplace } from "./netRequestRules.js";
+import setupNetRequestRules from "./netRequestRules.js";
 
 let allRuleGroups = [];
 const reloadData = async () => {
@@ -8,10 +8,36 @@ const reloadData = async () => {
 };
 reloadData();
 
+const updateAllRules = async () => {
+    // 清除所有现有规则
+    const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
+    const existingRuleIds = existingRules.map(rule => rule.id);
+    
+    if (existingRuleIds.length > 0) {
+        await chrome.declarativeNetRequest.updateDynamicRules({
+            removeRuleIds: existingRuleIds,
+            addRules: []
+        });
+    }
+    
+    // 为每个启用的规则组重新设置规则
+    // 注意：这里我们不传递deletedRuleIds，因为我们已经清除了所有规则
+    for (const group of allRuleGroups) {
+        if (group.on) {
+            // 创建一个临时组，只包含启用的规则
+            const enabledGroup = {
+                ...group,
+                rules: (group.rules || []).filter(rule => rule.on)
+            };
+            await setupNetRequestRules(enabledGroup, [], {});
+        }
+    }
+};
 
 const actions = {
-    sync: () => {
-        reloadData();
+    sync: async () => {
+        await reloadData();
+        await updateAllRules();
     }
 };
 
